@@ -40,27 +40,31 @@ class Game():
 	def set_screen_background_color(self, color: tuple):
 		self.screen.fill(color)
 
-	def draw_board(self): 
-		height_divider = (self.window_height-50)/3
-		width_divider = (self.window_width-50)/3
-		horizontal_line_end = self.window_width-25
-		vertical_line_end = self.window_height-25
+	def draw_board(self):
+		# 10% gap. 5% off top and bottom
+		margin = .3
+		height_at_ten_percent = self.window_height*margin
+		width_at_ten_percent = self.window_width*margin
+		height_divider = (self.window_height-height_at_ten_percent)/3
+		width_divider = (self.window_width-width_at_ten_percent)/3
+		horizontal_line_end = self.window_width-width_at_ten_percent/2
+		vertical_line_end = self.window_height-height_at_ten_percent/2
 
 		line_width = 4
 
 		pygame.draw.line(
 			self.screen, 
 			self.board_line_color, 
-			(25,(height_divider+25)), 
-			(horizontal_line_end, height_divider+25),
+			(width_at_ten_percent/2,(height_divider+height_at_ten_percent/2)), 
+			(horizontal_line_end, height_divider+height_at_ten_percent/2),
 			line_width
 		)
 
 		pygame.draw.line(
 			self.screen, 
 			self.board_line_color, 
-			(25,(height_divider*2+25)), 
-			(horizontal_line_end, height_divider*2+25),
+			(width_at_ten_percent/2,(height_divider*2+height_at_ten_percent/2)), 
+			(horizontal_line_end, height_divider*2+height_at_ten_percent/2),
 			line_width
 		)
 
@@ -68,16 +72,16 @@ class Game():
 		pygame.draw.line(
 			self.screen, 
 			self.board_line_color, 
-			((width_divider*2)+25,25), 
-			(width_divider*2+25, vertical_line_end),
+			((width_divider*2)+width_at_ten_percent/2,height_at_ten_percent/2), 
+			(width_divider*2+width_at_ten_percent/2, vertical_line_end),
 			line_width
 		)
 
 		pygame.draw.line(
 			self.screen, 
 			self.board_line_color, 
-			((width_divider)+25,25), 
-			(width_divider+25, vertical_line_end),
+			((width_divider)+width_at_ten_percent/2,height_at_ten_percent/2), 
+			(width_divider+width_at_ten_percent/2, vertical_line_end),
 			line_width
 		)
 
