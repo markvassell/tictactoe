@@ -23,6 +23,11 @@ class Game():
 				if event.type == pygame.QUIT:
 					self.is_running = False
 
+				if event.type == pygame.MOUSEBUTTONUP:
+					if event.button == 1:
+						# TODO: Update clicked square here. 
+						print(f'Mouse left clicked at {event.pos}')
+
 
 			pygame.display.flip()
 			self.clock.tick(60)
@@ -42,7 +47,7 @@ class Game():
 
 	def draw_board(self):
 		# 10% gap. 5% off top and bottom
-		margin = .3
+		margin = .1
 		height_at_ten_percent = self.window_height*margin
 		width_at_ten_percent = self.window_width*margin
 		height_divider = (self.window_height-height_at_ten_percent)/3
