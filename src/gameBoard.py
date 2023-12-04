@@ -1,3 +1,4 @@
+from gameBoard import GameBoard
 class GameBoard(object):
 	"""
 	Object representation of the game board. 

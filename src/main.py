@@ -1,7 +1,6 @@
-from gameBoard import GameBoard
-
+from game import Game
 
 if __name__ == "__main__":
 
-    board_instance = GameBoard()
-    print(board_instance.board)
+    game = Game()
+    game.start()
