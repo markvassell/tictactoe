@@ -16,6 +16,7 @@ class Game():
 		self.line_width = 4
 
 		self.game_board = GameBoard()
+		self.current_player = "X"
 
 
 	def start(self):
@@ -34,10 +35,12 @@ class Game():
 						index = self.get_index_from_click(event.pos[0], event.pos[1])
 
 						if 0 <= index < 9:
-							self.game_board.update_board("X", index)
+							self.game_board.update_board(self.current_player, index)
 							print(self.game_board.board)
-							if self.game_board.check_for_win("X"):
+							if self.game_board.check_for_win(self.current_player):
 								print("Win")
+							
+							self.current_player = "X" if self.current_player == "O" else "O"
 
 
 						
