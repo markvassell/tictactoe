@@ -1,4 +1,4 @@
-from gameBoard import GameBoard
+
 class GameBoard(object):
 	"""
 	Object representation of the game board. 
@@ -25,7 +25,7 @@ class GameBoard(object):
 	        Can be either X or O. 
 		"""
 		for i,j,k in self.win_options_indexes:
-			if letter == board[i] == board[j] == board[k]:
+			if letter == self.board[i] == self.board[j] == self.board[k]:
 				return True
 
 		return False
@@ -56,10 +56,10 @@ class GameBoard(object):
 		if index < 0 or index > 8:
 			return False
 
-		elif board[index] != 0:
+		elif self.board[index] != 0:
 			return False
 
 		else:
-			board[index] = letter
+			self.board[index] = letter
 
 		return True
