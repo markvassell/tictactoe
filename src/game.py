@@ -1,19 +1,20 @@
 import pygame
 from gameBoard import GameBoard
+from gameLines import Line
+from gameWindow import Window
+
 
 class Game():
 	"""docstring for Game"""
 	def __init__(self, width=600, height=500):
-		self.window_width = width
-		self.window_height = height
+		self.window = Window(width, height)
 		self.is_running = True
 		self.clock = pygame.time.Clock()
-		self.set_screen_dimensions(self.window_width, self.window_height)
-		self.bg_rgb_color = (50, 168, 133)
-		self.set_screen_background_color(self.bg_rgb_color)
-		self.board_line_color = (35, 36, 35)
-		self.line_margin = .2
-		self.line_width = 4
+		self.set_screen_dimensions(self.window.get_width(), self.window.get_height())
+		self.set_screen_background_color(self.window.get_bg_color())
+
+		self.grid_lines = Line((35, 36, 35), 4, 0.2)
+
 
 		self.game_board = GameBoard()
 		self.current_player = "X"
@@ -23,7 +24,7 @@ class Game():
 		pygame.init()
 
 		while self.is_running:
-			self.set_screen_background_color(self.bg_rgb_color)
+			self.set_screen_background_color(self.window.get_bg_color())
 			self.draw_board()
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -66,45 +67,45 @@ class Game():
 	def draw_board(self):
 		# 10% gap. 5% off top and bottom
 
-		percent_of_height = self.window_height*self.line_margin
-		percent_of_width = self.window_width*self.line_margin
-		height_divider = (self.window_height-percent_of_height)/3
-		width_divider = (self.window_width-percent_of_width)/3
-		horizontal_line_end = self.window_width-percent_of_width/2
-		vertical_line_end = self.window_height-percent_of_height/2
+		percent_of_height = self.window.get_height() * self.grid_lines.margin
+		percent_of_width = self.window.get_width() * self.grid_lines.margin
+		height_divider = ( self.window.get_height() - percent_of_height ) / 3
+		width_divider = ( self.window.get_width() - percent_of_width ) / 3
+		horizontal_line_end = self.window.get_width() - percent_of_width / 2
+		vertical_line_end = self.window.get_height() - percent_of_height/2
 
 
 		pygame.draw.line(
 			self.screen, 
-			self.board_line_color, 
+			self.grid_lines.color, 
 			(percent_of_width/2,(height_divider+percent_of_height/2)), 
 			(horizontal_line_end, height_divider+percent_of_height/2),
-			self.line_width
+			self.grid_lines.width
 		)
 
 		pygame.draw.line(
 			self.screen, 
-			self.board_line_color, 
+			self.grid_lines.color, 
 			(percent_of_width/2,(height_divider*2+percent_of_height/2)), 
 			(horizontal_line_end, height_divider*2+percent_of_height/2),
-			self.line_width
+			self.grid_lines.width
 		)
 
 
 		pygame.draw.line(
 			self.screen, 
-			self.board_line_color, 
+			self.grid_lines.color, 
 			((width_divider*2)+percent_of_width/2,percent_of_height/2), 
 			(width_divider*2+percent_of_width/2, vertical_line_end),
-			self.line_width
+			self.grid_lines.width
 		)
 
 		pygame.draw.line(
 			self.screen, 
-			self.board_line_color, 
+			self.grid_lines.color, 
 			((width_divider)+percent_of_width/2,percent_of_height/2), 
 			(width_divider+percent_of_width/2, vertical_line_end),
-			self.line_width
+			self.grid_lines.width
 		)
 
 	def get_index_from_click(self, width, height):
@@ -126,8 +127,8 @@ class Game():
 
 	def get_col_clicked(self, col):
 		
-		percent_of_width = self.window_width*self.line_margin
-		width_divider = (self.window_width-percent_of_width)/3
+		percent_of_width = self.window.get_width() * self.line_margin 
+		width_divider = ( self.window.get_width() - percent_of_width ) / 3
 		x2 = (width_divider)+percent_of_width/2
 		x3 = (width_divider*2)+percent_of_width/2
 		x1 = x2 - (x3-x2)
@@ -143,8 +144,8 @@ class Game():
 		return -1
 
 	def get_row_clicked(self, row):
-		percent_of_height = self.window_height*self.line_margin
-		height_divider = (self.window_height-percent_of_height)/3
+		percent_of_height = self.window.get_height() * self.line_margin
+		height_divider = ( self.window.get_height() - percent_of_height ) / 3
 		
 		y2 = height_divider+percent_of_height/2
 		y3 = height_divider*2+percent_of_height/2
@@ -159,6 +160,7 @@ class Game():
 			return 2
 
 		return -1
+
 
 
 
