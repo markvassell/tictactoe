@@ -5,5 +5,5 @@ class X():
         self.coord_t_right = top_right
         self.coord_b_left = bottom_left
         self.coord_b_right = bottom_right
-        self.color = (250, 0, 100)
+        self.color = (255, 255, 255)
         self.width = 6

@@ -1,9 +1,11 @@
 import pygame
 from gameBoard import GameBoard
+from scene import Scene
 from gameLines import Line
 from gameWindow import Window
 from characterO import O
 from characterX import X
+
 class Game():
 	"""docstring for Game"""
 	def __init__(self, width=600, height=500):
@@ -20,30 +22,46 @@ class Game():
 		self.current_player = "X"
 		self.placed_characters = list()
 
+		self.scene = Scene.GAME
+		
+
 
 	def start(self):
 		pygame.init()
-
+		pygame.display.set_caption('Tic Tac Toe')
+		
 		while self.is_running:
 			self.set_screen_background_color(self.window.get_bg_color())
-			self.draw_board()
+			
+			if self.scene == Scene.GAME:
+				self.draw_board()
+			elif self.scene == Scene.END:
+				self.draw_end_scene()
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					self.is_running = False
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_SPACE:
+						if Scene.END == self.scene:
+							self.clear_game_data()
+							self.scene = Scene.GAME
 
-				if event.type == pygame.MOUSEBUTTONUP:
+				if event.type == pygame.MOUSEBUTTONUP and self.scene == Scene.GAME:
 					if event.button == 1:
-						# TODO: Update clicked square here. 
 						index, *grid_data = self.get_index_from_click(event.pos[0], event.pos[1])
 
 						if 0 <= index < 9:
 							if self.game_board.update_board(self.current_player, index):
 								print(self.game_board.board)
 								if self.current_player == "X":
-									top_left = (grid_data[0], grid_data[2])
-									top_right = ( grid_data[1], grid_data[2])
-									bottom_left = (grid_data[0], grid_data[3])
-									bottom_right = ( grid_data[1], grid_data[3])
+									height_len = grid_data[3] - grid_data[2]
+									width_len = grid_data[1] - grid_data[0]
+									percent = 0.2
+									
+									top_left = (grid_data[0] + width_len * percent, grid_data[2] + height_len * percent)
+									top_right = ( grid_data[1] - width_len * percent, grid_data[2] + height_len * percent)
+									bottom_left = (grid_data[0] + width_len * percent, grid_data[3] - height_len * percent)
+									bottom_right = ( grid_data[1] - width_len * percent, grid_data[3] - height_len * percent)
 									self.placed_characters.append(("X", X(top_left, top_right, bottom_left, bottom_right)))
 
 								if self.current_player == "O":
@@ -64,8 +82,9 @@ class Game():
 
 								if self.game_board.check_for_win(self.current_player):
 									print("Win")
-							
-								self.current_player = "X" if self.current_player == "O" else "O"
+									self.scene = Scene.END
+								else:
+									self.current_player = "X" if self.current_player == "O" else "O"
 
 
 						
@@ -192,10 +211,18 @@ class Game():
 		return -1, -1, -1
 
 
+	def draw_end_scene(self):
+		font = pygame.font.Font(None, 36)
+		text = font.render(f'{self.current_player} Wins. Press space to play again', True, (0, 0, 0))
+		text_rectangle = text.get_rect()
+		text_rectangle.center = (self.window.get_width()//2,self.window.get_height()//2)
+		self.screen.blit(text, text_rectangle)
+    	
 
-
-
-
+	def clear_game_data(self):
+		self.game_board = GameBoard()
+		self.current_player = "X"
+		self.placed_characters = list()
 
 	
 	
